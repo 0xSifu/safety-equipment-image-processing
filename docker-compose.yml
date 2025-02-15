@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  postgres:  
+    image: postgres:latest
+    restart: always
+    environment: 
+      POSTGRES_PASSWORD: P@ssw0rd
+      POSTGRES_DB: eudox-dev
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - backend
+  
+  redis:
+    image: redis:latest
+    restart: always
+    command: redis-server --save 20 1 --loglevel warning --requirepass P@ssw0rd
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - backend
+  
+  rabbitmq: 
+    image: rabbitmq:3-management 
+    container_name: rabbitmq
+    ports:
+      - "5672:5672" 
+      - "15672:15672" 
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq 
+    networks:
+      - backend
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: master123
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  rabbitmq_data:

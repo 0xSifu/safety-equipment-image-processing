@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ImageAnalysis {
+  id        String   @id @default(uuid())
+  imageName String
+  imageUrl  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  people    Person[]
+}
+
+model Person {
+  id              String        @id @default(uuid())
+  description     String
+  imageAnalysisId String
+  imageAnalysis   ImageAnalysis @relation(fields: [imageAnalysisId], references: [id])
+  equipment       Equipment?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model Equipment {
+  id       String  @id @default(uuid())
+  personId String  @unique
+  person   Person  @relation(fields: [personId], references: [id])
+  
+  // Helmet details
+  hasHelmet Boolean @default(false)
+  helmetColor String?
+  
+  // Jacket/Uniform details
+  hasJacket Boolean @default(false)
+  jacketColor String?
+  
+  // Boots details
+  hasBoots Boolean @default(false)
+  bootsColor String?
+  
+  // Gloves details
+  hasGloves Boolean @default(false)
+  glovesColor String?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
