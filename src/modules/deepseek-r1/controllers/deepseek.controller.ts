@@ -49,7 +49,30 @@ export class DeepseekController {
         )
         file: Express.Multer.File,
     ): Promise<ImageAnalysisResponseDto> {
-        this.logger.log(`Received analysis request for image: ${file.originalname}`);
-        return this.deepseekService.analyzeImage(file);
+        this.logger.log('=== Incoming Image Analysis Request ===');
+        this.logger.log('File Details:', {
+            originalname: file.originalname,
+            mimetype: file.mimetype,
+            size: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
+            encoding: file.encoding,
+            fieldname: file.fieldname
+        });
+
+        this.logger.log('Request Headers:', {
+            contentType: file.mimetype,
+            filename: file.originalname
+        });
+
+        this.logger.log('File Buffer Preview:', {
+            bufferLength: file.buffer.length,
+            bufferPreview: file.buffer.slice(0, 100) // Just preview first 100 bytes
+        });
+
+        const result = await this.deepseekService.analyzeImage(file);
+        
+        this.logger.log('=== Analysis Complete ===');
+        this.logger.log('Analysis Result:', result);
+
+        return result;
     }
 }

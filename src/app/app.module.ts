@@ -13,6 +13,7 @@ import { AppService } from './app.service';
 import { CommonModule } from 'src/common/common.module';
 import { DeepseekR1Module } from 'src/modules/deepseek-r1/deepseekr1.module';
 import * as path from 'path';
+import { ConfigModule } from '@nestjs/config';
 
 const translationsPath = path.join(__dirname, '../i18n/');
 console.log('Translations Path:', translationsPath);
@@ -34,6 +35,9 @@ console.log('Translations Path:', translationsPath);
       ],
     }),
     TerminusModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
   ],
   controllers: [AppController],
   providers: [

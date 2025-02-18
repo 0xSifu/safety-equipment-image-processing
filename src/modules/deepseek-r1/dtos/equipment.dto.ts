@@ -39,6 +39,10 @@ export class PersonEquipment {
   @ApiProperty({ description: 'Boots equipment status' })
   @IsNotEmpty()
   boots: EquipmentStatus;
+
+  @ApiProperty({ description: 'Vest equipment status' })
+  @IsNotEmpty()
+  vest: EquipmentStatus;
 }
 
 export class ImageAnalysisResponseDto {
